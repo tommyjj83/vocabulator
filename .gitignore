@@ -1,0 +1,17 @@
+-- CLion files --
+cmake-build-debug/
+.idea/
+CMakeLists.txt
+CMakeLists.txt.user
+
+-- General files --
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.out
+*.run
+
+-- Build directories --
+build/

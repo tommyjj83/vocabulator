@@ -11,7 +11,6 @@ const TranslationUnit & RoundRobinTrainer::get_current() {
 
 
 void RoundRobinTrainer::update() {
-    TranslationUnit tmp = std::move(m_vocabulary.front());
+    m_vocabulary.emplace_back(std::move(m_vocabulary.front()));
     m_vocabulary.pop_front();
-    m_vocabulary.emplace_back(std::move(tmp));
 }

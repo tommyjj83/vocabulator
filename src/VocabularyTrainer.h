@@ -13,7 +13,7 @@
 class VocabularyTrainer {
   public:
     VocabularyTrainer() = default;
-    ~VocabularyTrainer() = default;
+    virtual ~VocabularyTrainer() = default;
     VocabularyTrainer(const VocabularyTrainer & other) = default;
     VocabularyTrainer(VocabularyTrainer && other) = default;
 

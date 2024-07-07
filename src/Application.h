@@ -7,7 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "TranslationUnit.h"
+#include "VocabularyTrainer.h"
 
 /**
  * Class encapsulating backend functionalities of the application.
@@ -16,7 +18,7 @@ class Application {
   public:
     Application() = default;
     ~Application() = default;
-    Application(const Application & other) = default;
+    Application(const Application & other) = delete;
     Application(Application && other) = default;
 
     /**
@@ -32,12 +34,37 @@ class Application {
     void load_vocabulary_from_file(const std::string & filepath);
 
     /**
+     * This function returns a current word to be translated
+     * @returns Word to be translated
+     */
+    std::string get_word_to_translate() const;
+
+    /**
+     * This function returns a coma separated list of translations of current word to be translated
+     * @returns A string containing a coma separated list of translations
+     */
+    std::string get_all_translations() const;
+
+    /**
+     * This function checks, if given translation is one of the possible translations in the current translation unit.
+     * @param[in] translation Word to be checked if it is a valid translation
+     * @returns True, if the word is valid translation, false otherwise
+     */
+    bool check_translation(const std::string & translation) const;
+
+    /**
      * This function returns, if the application is ready to provide practicing vocabulary
      * @returns True, if the application is ready, false otherwise
      */
     bool is_ready() const;
 
+    /**
+     * When this function is called, the application can update it's structures
+     */
+    void update() const;
+
   private:
     std::vector<TranslationUnit> m_vocabulary;
     bool m_data_loaded = false;
+    std::unique_ptr<VocabularyTrainer> m_trainer = nullptr;
 };

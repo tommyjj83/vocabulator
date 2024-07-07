@@ -6,6 +6,7 @@
 #pragma once
 
 #include <deque>
+#include <stdexcept>
 #include "TranslationUnit.h"
 #include "VocabularyTrainer.h"
 
@@ -15,14 +16,28 @@
  */
 class RoundRobinTrainer : public VocabularyTrainer {
   public:
+    /**
+     * @throws std::invalid_argument If the given vocabulary is empty. If the exception is thrown, the object should not be used
+     */
     explicit RoundRobinTrainer(std::deque<TranslationUnit> vocabulary)
-    :   m_vocabulary{std::move(vocabulary)} {}
+    :   m_vocabulary{std::move(vocabulary)} {
+        if (m_vocabulary.empty()) {
+            throw std::invalid_argument("Given vocabulary is empty");
+        }
+    }
 
+    /**
+     * @throws std::invalid_argument If the given vocabulary is empty. If the exception is thrown, the object should not be used
+     */
     explicit RoundRobinTrainer(const std::vector<TranslationUnit> & vocabulary) {
+        if (vocabulary.empty()) {
+            throw std::invalid_argument("Given vocabulary is empty");
+        }
+
         std::copy(vocabulary.begin(), vocabulary.end(), std::back_inserter(m_vocabulary));
     }
 
-    ~RoundRobinTrainer() = default;
+    ~RoundRobinTrainer() override = default;
     RoundRobinTrainer(const RoundRobinTrainer & other) = default;
     RoundRobinTrainer(RoundRobinTrainer && other) noexcept = default;
 

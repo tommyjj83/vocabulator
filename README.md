@@ -6,3 +6,9 @@ This project is intended to be a GUI application for extending user's vocabulary
 
 # Notes
 This application is my first GIU project in C++. It is done using Qt.
+
+# External Libraries
+For text validation ICU libraries are used. Is one wants to build this project, he needs to have them installed. Run:
+ - sudo apt update && sudo apt install icu-devtools libicu-dev libicu72
+
+If performed successfully, you can link against them.

@@ -5,6 +5,8 @@
 
 #include <sstream>
 #include <algorithm>
+#include <unicode/uchar.h>
+#include <unicode/unistr.h>
 #include "DataHandler.h"
 
 bool DataHandler::load_data(std::istream & input, std::vector<TranslationUnit> & to_return) {
@@ -82,9 +84,11 @@ bool DataHandler::word_is_valid(const std::string & word) {
         return false;
     }
 
-    if (std::any_of(word.begin(), word.end(), [](char c) {return !isalpha(c) && c != ' ' &&
-                                                                                c != '-' && c != '\'';})) {
-        return false;
+    icu::UnicodeString unicode_word = icu::UnicodeString::fromUTF8(word);
+    for (int i = 0; i < unicode_word.length(); i++) {
+        if (!u_isalpha(unicode_word[i]) && unicode_word[i] != ' ' && unicode_word[i] != '-' && unicode_word[i] != '\'') {
+            return false;
+        }
     }
 
     return true;

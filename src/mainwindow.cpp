@@ -6,7 +6,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -23,21 +24,28 @@ MainWindow::~MainWindow()
 void MainWindow::init() {
     setWindowTitle("Vocabulator");
     ui->labelError->setStyleSheet("QLabel { color : red; }");
-    ui->btnModifyVocabularyFile->setDisabled(true);
+    ui->btnModifyVocabularyFile->setDisabled(true); // Not yet implemented
+    ui->btnModifyVocabularyFile->setStyleSheet("QPushButton { background : lightGray }");
 }
 
 void MainWindow::on_btnCheckTranslation_clicked() {
     configure_training_widget(false);
+
+    QFont font = ui->labelResult->font();
+    font.setPointSize(font.pointSize() + (size().width() + size().height())  / 600);
+    ui->labelResult->setFont(font);
 
     QString translation = ui->lineEditTranslation->text();
     if (m_application.check_translation(translation.toStdString()) == true) {
         QString answer = "Correct! All possible translations are:\n";
         answer += m_application.get_all_translations();
         ui->labelResult->setText(answer);
+        ui->labelResult->setStyleSheet("QLabel { color : green; }");
     } else {
         QString answer = "Incorrect. The correct translation is:\n";
         answer += m_application.get_all_translations();
         ui->labelResult->setText(answer);
+        ui->labelResult->setStyleSheet("QLabel { color : red; }");
     }
 }
 
@@ -83,9 +91,47 @@ void MainWindow::on_btnModifyVocabularyFile_clicked() {
 }
 
 
+// Inspired by stack overflow: https://stackoverflow.com/questions/42652738/how-to-automatically-increase-decrease-text-size-in-label-in-qt
 void MainWindow::show_next_translation() {
-    ui->labelWordToTranslate->setText(m_application.get_word_to_translate().data());
+    QString text = m_application.get_word_to_translate().data();
+    QRect label_rectangle = ui->labelWordToTranslate->contentsRect();
+    QFont font = ui->labelWordToTranslate->font();
+    QFontMetrics font_metrics(font);
+    QRect proposed_rectangle = font_metrics.boundingRect(label_rectangle, Qt::TextWordWrap, text);
+
+    int size = font.pointSize();
+    int step = proposed_rectangle.width() > label_rectangle.width() || proposed_rectangle.height() > label_rectangle.height() ? -1 : 1;   // decide whether to increase or decrease
+
+    while (true) {
+        size += step;
+        font.setPointSize(size);
+        font_metrics = std::move(QFontMetrics(font));
+        proposed_rectangle = font_metrics.boundingRect(label_rectangle, Qt::TextWordWrap, text);
+
+        if (step < 0) {
+            if (proposed_rectangle.width() < label_rectangle.width() && proposed_rectangle.height() < label_rectangle.height()) {
+                break;
+            }
+        } else {
+            if (proposed_rectangle.width() > label_rectangle.width() || proposed_rectangle.height() > label_rectangle.height()) {
+                size -= step;   // It's already too big, so make it one smaller
+                font.setPointSize(size);
+                break;
+            }
+        }
+
+        if (size <= 1) {    // Cannot be made smaller
+            break;
+        }
+    }
+
+    if (font.pointSize() > 60) {
+        font.setPointSize(60);
+    }
+    ui->labelWordToTranslate->setFont(font);
+    ui->labelWordToTranslate->setText(text);
 }
+
 
 void MainWindow::on_btnNextTranslation_clicked() {
     configure_training_widget(true);
@@ -97,14 +143,30 @@ void MainWindow::on_btnNextTranslation_clicked() {
 void MainWindow::configure_training_widget(bool before_submitting_translation) {
     if (before_submitting_translation == true) {
         ui->btnCheckTranslation->setDisabled(false);
+        ui->btnCheckTranslation->setStyleSheet("QPushButton { background : white }");
+
         ui->btnNextTranslation->setDisabled(true);
+        ui->btnNextTranslation->setStyleSheet("QPushButton { background : lightGray }");
+
         ui->lineEditTranslation->setReadOnly(false);
+        ui->lineEditTranslation->setStyleSheet("QLineEdit { background : white }");
+
         ui->lineEditTranslation->clear();
         ui->labelResult->clear();
     } else {
         ui->btnCheckTranslation->setDisabled(true);
+        ui->btnCheckTranslation->setStyleSheet("QPushButton { background : lightGray }");
+
         ui->btnNextTranslation->setDisabled(false);
+        ui->btnNextTranslation->setStyleSheet("QPushButton { background : white }");
+
         ui->lineEditTranslation->setReadOnly(true);
+        ui->lineEditTranslation->setStyleSheet("QLineEdit { background : lightGray }");
     }
+}
+
+
+void MainWindow::on_btnHome_clicked() {
+    ui->mainStackedWidget->setCurrentWidget(ui->welcomePage);
 }
 

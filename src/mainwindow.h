@@ -38,6 +38,8 @@ private slots:
 
     void on_btnNextTranslation_clicked();
 
+    void on_btnHome_clicked();
+
 private:
     Ui::MainWindow *ui;
     Application m_application;

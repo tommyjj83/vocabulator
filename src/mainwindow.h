@@ -55,4 +55,21 @@ private:
      * of the widget should be appropriate to the state after submitting his translation
      */
     void configure_training_widget(bool before_submitting_translation);
+
+    /**
+     * This function finds the largest point size, where text will fit into the widget using given flags.
+     * @param[in] text Text that is planned to be displayed in the widget
+     * @param[in] widget Widget, for which the point size should be determined
+     * @param[in] flags Text alignment flags to use when displaying the text in the widget, see QFontMetrics::boundingRect()
+     * for more info about the values
+     * @returns 0 if there is not small enough point size so that the text would fit into the widget, or number greater
+     * than zero representing the largest point size found
+     */
+    static int find_largest_point_size(const QString & text, const QWidget * widget, int flags);
+
+    /**
+     * Event handler for every time the main window is resized
+     * @param[in,out] event The event that occurred
+     */
+    void resizeEvent(QResizeEvent * event);
 };

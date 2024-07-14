@@ -9,6 +9,9 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 
+void resizeEvent(QResizeEvent *event);
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow)
@@ -30,10 +33,6 @@ void MainWindow::init() {
 
 void MainWindow::on_btnCheckTranslation_clicked() {
     configure_training_widget(false);
-
-    QFont font = ui->labelResult->font();
-    font.setPointSize(font.pointSize() + (size().width() + size().height())  / 600);
-    ui->labelResult->setFont(font);
 
     QString translation = ui->lineEditTranslation->text();
     if (m_application.check_translation(translation.toStdString()) == true) {
@@ -94,40 +93,12 @@ void MainWindow::on_btnModifyVocabularyFile_clicked() {
 // Inspired by stack overflow: https://stackoverflow.com/questions/42652738/how-to-automatically-increase-decrease-text-size-in-label-in-qt
 void MainWindow::show_next_translation() {
     QString text = m_application.get_word_to_translate().data();
-    QRect label_rectangle = ui->labelWordToTranslate->contentsRect();
+    int point_size = find_largest_point_size(text, ui->labelWordToTranslate, Qt::TextWordWrap);
+
+    point_size = point_size > 60 ? 60 : point_size == 0 ? 1 : point_size;
     QFont font = ui->labelWordToTranslate->font();
-    QFontMetrics font_metrics(font);
-    QRect proposed_rectangle = font_metrics.boundingRect(label_rectangle, Qt::TextWordWrap, text);
+    font.setPointSize(point_size);
 
-    int size = font.pointSize();
-    int step = proposed_rectangle.width() > label_rectangle.width() || proposed_rectangle.height() > label_rectangle.height() ? -1 : 1;   // decide whether to increase or decrease
-
-    while (true) {
-        size += step;
-        font.setPointSize(size);
-        font_metrics = std::move(QFontMetrics(font));
-        proposed_rectangle = font_metrics.boundingRect(label_rectangle, Qt::TextWordWrap, text);
-
-        if (step < 0) {
-            if (proposed_rectangle.width() < label_rectangle.width() && proposed_rectangle.height() < label_rectangle.height()) {
-                break;
-            }
-        } else {
-            if (proposed_rectangle.width() > label_rectangle.width() || proposed_rectangle.height() > label_rectangle.height()) {
-                size -= step;   // It's already too big, so make it one smaller
-                font.setPointSize(size);
-                break;
-            }
-        }
-
-        if (size <= 1) {    // Cannot be made smaller
-            break;
-        }
-    }
-
-    if (font.pointSize() > 60) {
-        font.setPointSize(60);
-    }
     ui->labelWordToTranslate->setFont(font);
     ui->labelWordToTranslate->setText(text);
 }
@@ -168,5 +139,67 @@ void MainWindow::configure_training_widget(bool before_submitting_translation) {
 
 void MainWindow::on_btnHome_clicked() {
     ui->mainStackedWidget->setCurrentWidget(ui->welcomePage);
+}
+
+
+int MainWindow::find_largest_point_size(const QString & text, const QWidget *widget, int flags) {
+    QRect label_rectangle = widget->contentsRect();
+    QFont font = widget->font();
+    QFontMetrics font_metrics(font);
+    QRect proposed_rectangle = font_metrics.boundingRect(label_rectangle, flags, text);
+
+    int size = font.pointSize();
+    int step = proposed_rectangle.width() > label_rectangle.width() || proposed_rectangle.height() > label_rectangle.height() ? -1 : 1;   // decide whether to increase or decrease
+
+    while (true) {
+        size += step;
+        font.setPointSize(size);
+        font_metrics = std::move(QFontMetrics(font));
+        proposed_rectangle = font_metrics.boundingRect(label_rectangle, flags, text);
+
+        if (step < 0) {
+            if (proposed_rectangle.width() < label_rectangle.width() && proposed_rectangle.height() < label_rectangle.height()) {
+                break;
+            }
+        } else {
+            if (proposed_rectangle.width() > label_rectangle.width() || proposed_rectangle.height() > label_rectangle.height()) {
+                size -= step;   // It's already too big, so make it one smaller
+                font.setPointSize(size);
+                break;
+            }
+        }
+
+        if (size <= 1) {    // Cannot be made smaller
+            size = 0;
+            break;
+        }
+    }
+
+    return size;
+}
+
+
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    int point_size_offset = (size().width() + size().height()) / 600;   // Default point size + magic
+
+    QFont font = ui->labelResult->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->labelResult->setFont(font);
+
+    font = ui->labelError->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->labelError->setFont(font);
+
+    font = ui->labelFileSelected->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->labelFileSelected->setFont(font);
+
+    font = ui->label_3->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->label_3->setFont(font);
+
+    font = ui->label_4->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->label_4->setFont(font);
 }
 

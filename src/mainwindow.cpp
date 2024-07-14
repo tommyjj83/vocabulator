@@ -7,10 +7,6 @@
 #include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <iostream>
-
-void resizeEvent(QResizeEvent *event);
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -27,8 +23,13 @@ MainWindow::~MainWindow()
 void MainWindow::init() {
     setWindowTitle("Vocabulator");
     ui->labelError->setStyleSheet("QLabel { color : red; }");
+    ui->labelCorrectTranslationsCnt->setText("0");
+    ui->labelCorrectTranslationsCnt->setStyleSheet("QLabel { color : green; }");
+    ui->labelIncorrectTranslationsCnt->setText("0");
+    ui->labelIncorrectTranslationsCnt->setStyleSheet("QLabel { color : red; }");
     ui->btnModifyVocabularyFile->setDisabled(true); // Not yet implemented
     ui->btnModifyVocabularyFile->setStyleSheet("QPushButton { background : lightGray }");
+
 }
 
 void MainWindow::on_btnCheckTranslation_clicked() {
@@ -40,11 +41,13 @@ void MainWindow::on_btnCheckTranslation_clicked() {
         answer += m_application.get_all_translations();
         ui->labelResult->setText(answer);
         ui->labelResult->setStyleSheet("QLabel { color : green; }");
+        increase_status_counter(true);
     } else {
         QString answer = "Incorrect. The correct translation is:\n";
         answer += m_application.get_all_translations();
         ui->labelResult->setText(answer);
         ui->labelResult->setStyleSheet("QLabel { color : red; }");
+        increase_status_counter(false);
     }
 }
 
@@ -79,9 +82,7 @@ void MainWindow::on_btnPractice_clicked()
         return;
     }
 
-    ui->mainStackedWidget->setCurrentWidget(ui->volcabularyTrainer);
-    configure_training_widget(true);
-    show_next_translation();
+    show_stacked_widget_trainer();
 }
 
 
@@ -138,7 +139,7 @@ void MainWindow::configure_training_widget(bool before_submitting_translation) {
 
 
 void MainWindow::on_btnHome_clicked() {
-    ui->mainStackedWidget->setCurrentWidget(ui->welcomePage);
+    show_stacked_widget_welcome_page();
 }
 
 
@@ -201,5 +202,37 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
     font = ui->label_4->font();
     font.setPointSize(11 + point_size_offset);
     ui->label_4->setFont(font);
+
+    font = ui->labelCorrectTranslationsCnt->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->labelCorrectTranslationsCnt->setFont(font);
+
+    font = ui->labelIncorrectTranslationsCnt->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->labelIncorrectTranslationsCnt->setFont(font);
+
+    font = ui->label->font();
+    font.setPointSize(11 + point_size_offset);
+    ui->label->setFont(font);
+}
+
+
+void MainWindow::show_stacked_widget_trainer() {
+    ui->mainStackedWidget->setCurrentWidget(ui->volcabularyTrainer);
+    configure_training_widget(true);
+    show_next_translation();
+}
+
+
+void MainWindow::show_stacked_widget_welcome_page() {
+    ui->mainStackedWidget->setCurrentWidget(ui->welcomePage);
+}
+
+
+void MainWindow::increase_status_counter(bool translation_is_correct) {
+    QLabel * label = translation_is_correct ? ui->labelCorrectTranslationsCnt : ui->labelIncorrectTranslationsCnt;
+    size_t value = std::stoi(label->text().toStdString());
+    ++value;
+    label->setText(std::to_string(value).data());
 }
 

@@ -71,5 +71,22 @@ private:
      * Event handler for every time the main window is resized
      * @param[in,out] event The event that occurred
      */
-    void resizeEvent(QResizeEvent * event);
+    void resizeEvent(QResizeEvent * event) override;
+
+    /**
+     * Function that handles change to the trainer stacked widget. It also modifies and sets all necessary parameters
+     */
+    void show_stacked_widget_trainer();
+
+    /**
+     * Function that handles change to the welcome page stacked widget. It also modifies and sets all necessary parameters
+     */
+    void show_stacked_widget_welcome_page();
+
+    /**
+     * Function increases counter of correct or incorrect translations
+     * @param[in] translation_is_correct True, if counter of correct translations should increase by one, false if counter of
+     * incorrect translations should increase by one
+     */
+    void increase_status_counter(bool translation_is_correct);
 };

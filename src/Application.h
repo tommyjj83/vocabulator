@@ -5,11 +5,12 @@
 
 #pragma once
 
+#include <memory>
+#include <random>
 #include <string>
 #include <vector>
-#include <memory>
-#include "PRNG.h"
 #include "TranslationUnit.h"
+#include "Settings.h"
 #include "VocabularyTrainer.h"
 
 /**
@@ -17,10 +18,14 @@
  */
 class Application {
   public:
-    Application() = default;
+    Application() = delete;
+
+    explicit Application(std::mt19937 & prng)
+    : m_prng{prng} {}
+
     ~Application() = default;
     Application(const Application & other) = delete;
-    Application(Application && other) = default;
+    Application(Application && other) = delete;
 
     /**
      * This function loads vocabulary data from a given file. Each line of the file needs to have this syntax:
@@ -65,8 +70,8 @@ class Application {
     void update() const;
 
   private:
-    std::vector<TranslationUnit> m_vocabulary;
-    bool m_data_loaded = false;
+    Settings m_settings;
     std::unique_ptr<VocabularyTrainer> m_trainer = nullptr;
-    PRNG m_random;
+    std::mt19937 & m_prng;
+    bool m_data_loaded = false;
 };

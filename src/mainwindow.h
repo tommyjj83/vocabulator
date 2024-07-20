@@ -19,7 +19,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(std::mt19937 & rng, QWidget *parent = nullptr);
     ~MainWindow();
 
     /**

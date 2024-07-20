@@ -7,7 +7,9 @@
 #include <algorithm>
 #include "Application.h"
 #include "DataHandler.h"
+#include "RandomSelectTrainer.h"
 #include "RoundRobinTrainer.h"
+#include "WeightedRandomSelectTrainer.h"
 
 void Application::load_vocabulary_from_file(const std::string & filepath) {
     m_data_loaded = false;
@@ -17,17 +19,28 @@ void Application::load_vocabulary_from_file(const std::string & filepath) {
         throw std::invalid_argument("Error when opening the file");
     }
 
-    m_vocabulary.clear();
-    if (DataHandler::load_data(file, m_vocabulary) == false) {
+    std::vector<TranslationUnit> vocabulary;
+    if (DataHandler::load_data(file, vocabulary) == false) {
         throw std::logic_error("Error occurred when loading the data");
     }
 
-    if (m_vocabulary.empty()) {
+    if (vocabulary.empty()) {
         throw std::logic_error("No data loaded");
     }
 
     m_data_loaded = true;
-    m_trainer = std::make_unique<RoundRobinTrainer>(RoundRobinTrainer{m_vocabulary});
+
+    switch (m_settings.m_trainer_type) {
+        case TrainerType::WEIGHTED_RANDOM_SELECT:
+            m_trainer = std::make_unique<WeightedRandomSelectTrainer>(WeightedRandomSelectTrainer{vocabulary, m_prng});
+            break;
+        case TrainerType::RANDOM_SELECT:
+            m_trainer = std::make_unique<RandomSelectTrainer>(RandomSelectTrainer{vocabulary, m_prng});
+            break;
+        case TrainerType::ROUND_ROBIN:
+            m_trainer = std::make_unique<RoundRobinTrainer>(RoundRobinTrainer{vocabulary});
+            break;
+    }
 }
 
 

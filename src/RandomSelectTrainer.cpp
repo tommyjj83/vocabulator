@@ -7,10 +7,10 @@
 
 
 const TranslationUnit & RandomSelectTrainer::get_current() {
-    return m_vocabulary[m_current_unit];
+    return m_vocabulary[m_generator.current()];
 }
 
 
 void RandomSelectTrainer::update() {
-    m_current_unit = m_random.get_random_in_range(m_uniform_int_distribution);
+    m_generator.next();
 }

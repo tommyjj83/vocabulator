@@ -12,7 +12,7 @@ const TranslationUnit & WeightedRandomSelectTrainer::get_current() {
 
 
 void WeightedRandomSelectTrainer::update() {
-    size_t weight = m_random.get_random_in_range(m_uniform_int_distribution);
+    size_t weight = m_generator.next();
     auto closest_weight = std::lower_bound(m_weights.begin(), m_weights.end(), weight);
     m_current_unit = std::distance(m_weights.begin(), closest_weight);
 }

@@ -16,6 +16,8 @@
  */
 class RoundRobinTrainer : public VocabularyTrainer {
   public:
+    RoundRobinTrainer() = delete;
+
     /**
      * @throws std::invalid_argument If the given vocabulary is empty. If the exception is thrown, the object should not be used
      */

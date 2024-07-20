@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "PRNG.h"
 #include "TranslationUnit.h"
 #include "VocabularyTrainer.h"
 
@@ -67,4 +68,5 @@ class Application {
     std::vector<TranslationUnit> m_vocabulary;
     bool m_data_loaded = false;
     std::unique_ptr<VocabularyTrainer> m_trainer = nullptr;
+    PRNG m_random;
 };

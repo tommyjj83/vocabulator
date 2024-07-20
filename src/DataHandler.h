@@ -21,7 +21,7 @@ class DataHandler {
 
     /**
      * This function loads data from a given stream. Each line, representing one translation unit, needs to have this syntax:
-     *  to_translate;translation[;translation[;translation...]]
+     *  weight;to_translate;translation[;translation[;translation...]]
      * where each word (text in between semicolons) has to contain only letters, dashes, apostrophes, or spaces. The word
      * has not to be empty or only consist of spaces. Such words are skipped.
      * @param[in] input Input stream from which to load the data
@@ -38,7 +38,7 @@ class DataHandler {
   private:
     /**
      * Function parses line according to syntax:
-     *  to_translate;translation[;translation[;translation...]]
+     *  weight;to_translate;translation[;translation[;translation...]]
      * It trims the word of redundant spaces at the beginning and at the end, and validates it. Valid word consists only of
      * letters, dashes, apostrophes, or spaces. The word has not to be empty or only consist of spaces.
      * @param[in] line Line to be parsed

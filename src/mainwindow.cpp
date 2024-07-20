@@ -22,14 +22,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::init() {
     setWindowTitle("Vocabulator");
+
     ui->labelError->setStyleSheet("QLabel { color : red; }");
+
     ui->labelCorrectTranslationsCnt->setText("0");
     ui->labelCorrectTranslationsCnt->setStyleSheet("QLabel { color : green; }");
+
     ui->labelIncorrectTranslationsCnt->setText("0");
     ui->labelIncorrectTranslationsCnt->setStyleSheet("QLabel { color : red; }");
+
     ui->btnModifyVocabularyFile->setDisabled(true); // Not yet implemented
     ui->btnModifyVocabularyFile->setStyleSheet("QPushButton { background : lightGray }");
 
+    ui->labelFileSelected->setText("No file selected");
 }
 
 void MainWindow::on_btnCheckTranslation_clicked() {
@@ -61,11 +66,11 @@ void MainWindow::on_btnSelectVocabularyFile_clicked()
     try {
         m_application.load_vocabulary_from_file(file.toStdString());
     } catch (const std::invalid_argument & exception) {
-        ui->labelFileSelected->clear();
+        ui->labelFileSelected->setText("No file selected");
         ui->labelError->setText(QString{exception.what()});
         return;
     } catch (const std::logic_error & exception) {
-        ui->labelFileSelected->clear();
+        ui->labelFileSelected->setText("No file selected");
         ui->labelError->setText(QString{exception.what()});
         return;
     }

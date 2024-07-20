@@ -24,7 +24,7 @@ class Application {
 
     /**
      * This function loads vocabulary data from a given file. Each line of the file needs to have this syntax:
-     *  to_translate;translation[;translation[;translation...]]
+     *  weight;to_translate;translation[;translation[;translation...]]
      * where each word (text in between semicolons) has to contain only letters, dashes, apostrophes, or spaces. The word
      * has not to be empty or only consist of spaces.
      * After this function is called and it fails at any point, or not a single translation unit is loaded, the application is not ready

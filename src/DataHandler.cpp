@@ -53,8 +53,15 @@ inline void DataHandler::rtrim(std::string &s) {
 
 
 bool DataHandler::parse_line(const std::string & line, TranslationUnit & translation_unit) {
-    size_t word_count = 0;
     std::istringstream iss{line};
+    size_t word_count = 0, weight;
+    char semicolon;
+
+    iss >> weight >> semicolon;
+    if (iss.fail() || weight < 1 || weight > 100 || semicolon != ';') {
+        return false;
+    }
+    translation_unit.m_weight = weight;
 
     for (std::string word; std::getline(iss, word, ';');) {
         DataHandler::ltrim(word);

@@ -14,9 +14,10 @@
 class TranslationUnit {
   public:
     TranslationUnit() = default;
-    TranslationUnit(std::string word_to_translate, std::vector<std::string> translation)
+    TranslationUnit(std::string word_to_translate, std::vector<std::string> translation, unsigned weight)
     :   m_word_to_translate{std::move(word_to_translate)},
-        m_translation{std::move(translation)} {}
+        m_translation{std::move(translation)},
+        m_weight{weight} {}
 
     ~TranslationUnit() = default;
     TranslationUnit(const TranslationUnit & other) = default;
@@ -24,4 +25,5 @@ class TranslationUnit {
 
     std::string m_word_to_translate;
     std::vector<std::string> m_translation;
+    unsigned m_weight{};
 };

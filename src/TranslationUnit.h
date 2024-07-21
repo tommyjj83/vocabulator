@@ -23,7 +23,20 @@ class TranslationUnit {
     TranslationUnit(const TranslationUnit & other) = default;
     TranslationUnit(TranslationUnit && other) = default;
 
+    friend std::ostream & operator<<(std::ostream & os, const TranslationUnit & unit);
+
+    friend std::istream & operator>>(std::istream & is, TranslationUnit & unit);
+
     std::string m_word_to_translate;
     std::vector<std::string> m_translation;
     unsigned m_weight;
+
+  private:
+    /**
+     * Validates the word. Valid word consists only of letters, dashes, apostrophes, or spaces. The word has not to be
+     * empty or only consist of spaces.
+     * @param[in] word Word to be validated
+     * @returns True, if word is valid, false otherwise
+     */
+    static bool word_is_valid(const std::string & word);
 };

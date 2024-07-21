@@ -21,8 +21,9 @@ class RoundRobinTrainer : public VocabularyTrainer {
      * @throws std::invalid_argument If the given vocabulary is empty. If the exception is thrown, the object should not be used
      */
     explicit RoundRobinTrainer(std::vector<TranslationUnit> vocabulary)
-    :   m_vocabulary{std::move(vocabulary)} {
-        if (vocabulary.empty()) {
+    :   m_vocabulary{std::move(vocabulary)},
+        m_current_unit{0} {
+        if (m_vocabulary.empty()) {
             throw std::invalid_argument("Given vocabulary is empty");
         }
     }

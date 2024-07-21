@@ -5,9 +5,9 @@
 
 #include <sstream>
 #include <algorithm>
-#include <unicode/uchar.h>
-#include <unicode/unistr.h>
+#include <iostream>
 #include "DataHandler.h"
+#include "InvalidSyntax.h"
 
 bool DataHandler::load_data(std::istream & input, std::vector<TranslationUnit> & to_return) {
     if (!input) {
@@ -16,7 +16,12 @@ bool DataHandler::load_data(std::istream & input, std::vector<TranslationUnit> &
 
     for (std::string line; std::getline(input, line);) {
         TranslationUnit new_unit{};
-        if (parse_line(line, new_unit) == false) {  // TODO alert on mistakes in syntax?
+        std::istringstream iss{line};
+        try {
+            iss >> new_unit;
+        } catch (const InvalidSyntax & exception) { // TODO Show syntax errors to the user
+            continue;
+        } catch (const std::logic_error & exception) {
             continue;
         }
 
@@ -37,7 +42,7 @@ void DataHandler::save_data() {
 
 
 // trim from start (in place) (stackoverflow)
-inline void DataHandler::ltrim(std::string &s) {
+void DataHandler::ltrim(std::string &s) {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
         return !std::isspace(ch);
     }));
@@ -45,58 +50,8 @@ inline void DataHandler::ltrim(std::string &s) {
 
 
 // trim from end (in place) (stackoverflow)
-inline void DataHandler::rtrim(std::string &s) {
+void DataHandler::rtrim(std::string &s) {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
         return !std::isspace(ch);
     }).base(), s.end());
-}
-
-
-bool DataHandler::parse_line(const std::string & line, TranslationUnit & translation_unit) {
-    std::istringstream iss{line};
-    size_t word_count = 0, weight;
-    char semicolon;
-
-    iss >> weight >> semicolon;
-    if (iss.fail() || weight < 1 || weight > 100 || semicolon != ';') {
-        return false;
-    }
-    translation_unit.m_weight = weight;
-
-    for (std::string word; std::getline(iss, word, ';');) {
-        DataHandler::ltrim(word);
-        DataHandler::rtrim(word);
-        if (!word_is_valid(word)) {
-            continue;
-        }
-
-        word_count++;
-        if (word_count == 1) {
-            translation_unit.m_word_to_translate = std::move(word);
-        } else {
-            translation_unit.m_translation.emplace_back(std::move(word));
-        }
-    }
-
-    if (!iss.eof()) {
-        return false;
-    }
-
-    return word_count >= 2;
-}
-
-
-bool DataHandler::word_is_valid(const std::string & word) {
-    if (word.empty()) {
-        return false;
-    }
-
-    icu::UnicodeString unicode_word = icu::UnicodeString::fromUTF8(word);
-    for (int i = 0; i < unicode_word.length(); i++) {
-        if (!u_isalpha(unicode_word[i]) && unicode_word[i] != ' ' && unicode_word[i] != '-' && unicode_word[i] != '\'') {
-            return false;
-        }
-    }
-
-    return true;
 }

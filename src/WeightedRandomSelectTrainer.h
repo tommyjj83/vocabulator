@@ -19,7 +19,8 @@ class WeightedRandomSelectTrainer : public VocabularyTrainer {
     WeightedRandomSelectTrainer(std::vector<TranslationUnit> vocabulary, std::mt19937 & generator)
     :   m_vocabulary{std::move(vocabulary)},
         m_weights{},
-        m_generator{0, 0, generator} {  // Dummy
+        m_generator{0, 0, generator},   // Dummy
+        m_current_unit{0} { // Dummy
         if (m_vocabulary.empty()) {
             throw std::invalid_argument("Given vocabulary is empty");
         }

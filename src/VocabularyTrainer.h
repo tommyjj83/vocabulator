@@ -21,10 +21,16 @@ class VocabularyTrainer {
      * This function returns the current translation unit in order specified by implementation of each child class
      * @returns The current translation unit in order specified by implementation of each child class
      */
-    virtual const TranslationUnit & get_current() = 0;
+    virtual const TranslationUnit & get_current() const = 0;
 
     /**
      * This function updates internal structure, so that the next call of get_current() would return next translation unit in order
      */
     virtual void update() = 0;
+
+    /**
+     * This function gets the vocabulary in the state in which the trainer has it, with all the changes made.
+     * @returns The vocabulary in a state in which it is after possible changes made
+     */
+    virtual std::vector<TranslationUnit> get_vocabulary() const = 0;
 };

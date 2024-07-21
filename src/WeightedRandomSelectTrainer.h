@@ -41,9 +41,11 @@ class WeightedRandomSelectTrainer : public VocabularyTrainer {
 
     ~WeightedRandomSelectTrainer() override = default;
 
-    const TranslationUnit & get_current() override;
+    const TranslationUnit & get_current() const override;
 
     void update() override;
+
+    std::vector<TranslationUnit> get_vocabulary() const override;
 
   private:
     std::vector<TranslationUnit> m_vocabulary;

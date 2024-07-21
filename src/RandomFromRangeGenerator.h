@@ -23,7 +23,8 @@ class RandomFromRangeGenerator {
      */
     explicit RandomFromRangeGenerator(size_t from, size_t to, std::mt19937 & prng)
     :   m_prng{prng},
-        m_range{from, to} {
+        m_range{from, to},
+        m_current_value{0} {
         next();
     }
 
@@ -52,5 +53,5 @@ class RandomFromRangeGenerator {
   private:
     std::mt19937 & m_prng;
     std::uniform_int_distribution<size_t> m_range;
-    size_t m_current_value = 0;
+    size_t m_current_value;
 };

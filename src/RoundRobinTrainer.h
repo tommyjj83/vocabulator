@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include <deque>
 #include <stdexcept>
 #include "TranslationUnit.h"
 #include "VocabularyTrainer.h"
@@ -21,22 +20,11 @@ class RoundRobinTrainer : public VocabularyTrainer {
     /**
      * @throws std::invalid_argument If the given vocabulary is empty. If the exception is thrown, the object should not be used
      */
-    explicit RoundRobinTrainer(std::deque<TranslationUnit> vocabulary)
+    explicit RoundRobinTrainer(std::vector<TranslationUnit> vocabulary)
     :   m_vocabulary{std::move(vocabulary)} {
-        if (m_vocabulary.empty()) {
-            throw std::invalid_argument("Given vocabulary is empty");
-        }
-    }
-
-    /**
-     * @throws std::invalid_argument If the given vocabulary is empty. If the exception is thrown, the object should not be used
-     */
-    explicit RoundRobinTrainer(const std::vector<TranslationUnit> & vocabulary) {
         if (vocabulary.empty()) {
             throw std::invalid_argument("Given vocabulary is empty");
         }
-
-        std::copy(vocabulary.begin(), vocabulary.end(), std::back_inserter(m_vocabulary));
     }
 
     ~RoundRobinTrainer() override = default;
@@ -48,13 +36,16 @@ class RoundRobinTrainer : public VocabularyTrainer {
      * the initialization. When all translation units has been taken, it starts from the beginning.
      * @returns The current translation unit
      */
-    const TranslationUnit & get_current() override;
+    const TranslationUnit & get_current() const override;
 
     /**
      * This function updates internal structure, so that the next call of get_current() would return next translation unit in order
      */
     void update() override;
 
+    std::vector<TranslationUnit> get_vocabulary() const override;
+
   private:
-    std::deque<TranslationUnit> m_vocabulary;
+    std::vector<TranslationUnit> m_vocabulary;
+    size_t m_current_unit;
 };

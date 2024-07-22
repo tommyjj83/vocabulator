@@ -44,7 +44,7 @@ std::istream & operator>>(std::istream & is, TranslationUnit & unit) {
         std::string message = "Weight has to be in range ";
         message += std::to_string(Settings::MINIMUM_WEIGHT) + " - " + std::to_string(Settings::MAXIMUM_WEIGHT)
                 + ". Weight found: " + std::to_string(weight) + "\n";
-        throw InvalidSyntax(message.data());
+        throw InvalidSyntax(message.c_str());
     }
     unit.m_weight = weight;
 
@@ -61,7 +61,7 @@ std::istream & operator>>(std::istream & is, TranslationUnit & unit) {
             std::string message = "Invalid character in word: ";
             message += word;
             message += "\n";
-            throw InvalidSyntax(message.data());
+            throw InvalidSyntax(message.c_str());
         }
 
         ++word_count;

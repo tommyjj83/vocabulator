@@ -240,5 +240,5 @@ void MainWindow::increase_status_counter(bool translation_is_correct) {
     QLabel * label = translation_is_correct ? ui->labelCorrectTranslationsCnt : ui->labelIncorrectTranslationsCnt;
     size_t value = std::stoi(label->text().toStdString());
     ++value;
-    label->setText(std::to_string(value).data());
+    label->setText(std::to_string(value).c_str());
 }

@@ -42,15 +42,16 @@ void MainWindow::on_btnCheckTranslation_clicked() {
     configure_training_widget(false);
 
     QString translation = ui->lineEditTranslation->text();
-    if (m_application.check_translation(translation.toStdString()) == true) {
+    const TranslationUnit & current_unit = m_application.m_trainer->get_current();
+    if (current_unit.check_translation(translation.toStdString()) == true) {
         QString answer = "Correct! All possible translations are:\n";
-        answer += m_application.get_all_translations();
+        answer += current_unit.get_all_translations();
         ui->labelResult->setText(answer);
         ui->labelResult->setStyleSheet("QLabel { color : green; }");
         increase_status_counter(true);
     } else {
         QString answer = "Incorrect. The correct translation is:\n";
-        answer += m_application.get_all_translations();
+        answer += current_unit.get_all_translations();
         ui->labelResult->setText(answer);
         ui->labelResult->setStyleSheet("QLabel { color : red; }");
         increase_status_counter(false);
@@ -99,7 +100,7 @@ void MainWindow::on_btnModifyVocabularyFile_clicked() {
 
 // Inspired by stack overflow: https://stackoverflow.com/questions/42652738/how-to-automatically-increase-decrease-text-size-in-label-in-qt
 void MainWindow::show_next_translation() {
-    QString text = m_application.get_word_to_translate().data();
+    QString text = m_application.m_trainer->get_current().m_word_to_translate.c_str();
     int point_size = find_largest_point_size(text, ui->labelWordToTranslate, Qt::TextWordWrap);
 
     point_size = point_size > 60 ? 60 : point_size == 0 ? 1 : point_size;
@@ -113,7 +114,7 @@ void MainWindow::show_next_translation() {
 
 void MainWindow::on_btnNextTranslation_clicked() {
     configure_training_widget(true);
-    m_application.update();
+    m_application.m_trainer->update();
     show_next_translation();
 }
 
@@ -241,4 +242,3 @@ void MainWindow::increase_status_counter(bool translation_is_correct) {
     ++value;
     label->setText(std::to_string(value).data());
 }
-

@@ -24,6 +24,19 @@ class TranslationUnit {
     TranslationUnit(TranslationUnit && other) = default;
 
     /**
+     * This function checks, if given translation is one of the possible translations in the current translation unit.
+     * @param[in] translation Word to be checked if it is a valid translation
+     * @returns True, if the word is valid translation, false otherwise
+     */
+    bool check_translation(const std::string & translation) const;
+
+    /**
+     * This function returns a coma separated list of translations of current word to be translated
+     * @returns A string containing a coma separated list of translations
+     */
+    std::string get_all_translations() const;
+
+    /**
      * This function saves data into a given stream. The data stored have this syntax:
      *  weight;to_translate;translation[;translation[;translation...]]
      * where each word (text in between semicolons) has to contain only letters, dashes, apostrophes, or spaces. The word

@@ -21,7 +21,9 @@ class Application {
     Application() = delete;
 
     explicit Application(std::mt19937 & prng)
-    : m_prng{prng} {}
+    :   m_prng{prng},
+        m_trainer{nullptr},
+        m_data_loaded{false} {}
 
     ~Application() = default;
     Application(const Application & other) = delete;
@@ -40,38 +42,14 @@ class Application {
     void load_vocabulary_from_file(const std::string & filepath);
 
     /**
-     * This function returns a current word to be translated
-     * @returns Word to be translated
-     */
-    std::string get_word_to_translate() const;
-
-    /**
-     * This function returns a coma separated list of translations of current word to be translated
-     * @returns A string containing a coma separated list of translations
-     */
-    std::string get_all_translations() const;
-
-    /**
-     * This function checks, if given translation is one of the possible translations in the current translation unit.
-     * @param[in] translation Word to be checked if it is a valid translation
-     * @returns True, if the word is valid translation, false otherwise
-     */
-    bool check_translation(const std::string & translation) const;
-
-    /**
      * This function returns, if the application is ready to provide practicing vocabulary
      * @returns True, if the application is ready, false otherwise
      */
     bool is_ready() const;
 
-    /**
-     * When this function is called, the application can update it's structures
-     */
-    void update() const;
-
+    std::unique_ptr<VocabularyTrainer> m_trainer;
   private:
     Settings m_settings;
-    std::unique_ptr<VocabularyTrainer> m_trainer = nullptr;
     std::mt19937 & m_prng;
-    bool m_data_loaded = false;
+    bool m_data_loaded;
 };

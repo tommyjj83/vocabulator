@@ -3,12 +3,21 @@
  * @date 05. 07. 2024
  */
 
+#include <algorithm>
 #include <iostream>
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
 #include "DataHandler.h"
 #include "InvalidSyntax.h"
 #include "TranslationUnit.h"
+
+bool TranslationUnit::check_translation(const std::string & translation) const {
+    return std::any_of(m_translation.begin(), m_translation.end(),
+                       [&translation] (const std::string & s) {
+                           return s == translation;
+                       });
+}
+
 
 std::ostream & operator<<(std::ostream & os, const TranslationUnit & unit) {
     os << unit.m_weight << ";" << unit.m_word_to_translate << ";";
@@ -85,4 +94,15 @@ bool TranslationUnit::word_is_valid(const std::string & word) {
     }
 
     return true;
+}
+
+
+std::string TranslationUnit::get_all_translations() const {
+    std::string to_return = m_translation[0];
+    for (size_t i = 1; i < m_translation.size(); i++) {
+        to_return += ", ";
+        to_return += m_translation[i];
+    }
+
+    return std::move(to_return);
 }

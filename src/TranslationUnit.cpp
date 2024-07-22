@@ -9,6 +9,7 @@
 #include <unicode/unistr.h>
 #include "DataHandler.h"
 #include "InvalidSyntax.h"
+#include "Settings.h"
 #include "TranslationUnit.h"
 
 bool TranslationUnit::check_translation(const std::string & translation) const {
@@ -39,10 +40,10 @@ std::istream & operator>>(std::istream & is, TranslationUnit & unit) {
         throw InvalidSyntax("Empty line");
     } else if (is.fail()) {
         throw InvalidSyntax("Weight expected at the beginning of the line");
-    } else if (weight < 1 || weight > 100) {
-        std::string message = "Weight has to be in range 1 - 100. Weight found: ";
-        message += std::to_string(weight);
-        message += "\n";
+    } else if (weight < Settings::MINIMUM_WEIGHT || weight > Settings::MAXIMUM_WEIGHT) {
+        std::string message = "Weight has to be in range ";
+        message += std::to_string(Settings::MINIMUM_WEIGHT) + " - " + std::to_string(Settings::MAXIMUM_WEIGHT)
+                + ". Weight found: " + std::to_string(weight) + "\n";
         throw InvalidSyntax(message.data());
     }
     unit.m_weight = weight;

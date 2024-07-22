@@ -54,7 +54,7 @@ class TranslationUnit {
 
     std::string m_word_to_translate;
     std::vector<std::string> m_translation;
-    size_t m_weight;
+    unsigned m_weight;
 
   private:
     /**

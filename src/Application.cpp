@@ -13,6 +13,7 @@
 
 void Application::load_vocabulary_from_file(const std::string & filepath) {
     m_data_loaded = false;
+    m_settings.m_path_to_input_file.clear();
 
     std::ifstream file(filepath);
     if (!file) {
@@ -29,6 +30,7 @@ void Application::load_vocabulary_from_file(const std::string & filepath) {
     }
 
     m_data_loaded = true;
+    m_settings.m_path_to_input_file = filepath;
 
     switch (m_settings.m_trainer_type) {
         case TrainerType::WEIGHTED_RANDOM_SELECT:

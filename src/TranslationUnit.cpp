@@ -36,6 +36,7 @@ std::istream & operator>>(std::istream & is, TranslationUnit & unit) {
         message += "\n";
         throw InvalidSyntax(message.data());
     }
+    unit.m_weight = weight;
 
     is >> semicolon;
     if (semicolon != ';') {

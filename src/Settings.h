@@ -10,4 +10,5 @@
 class Settings {
   public:
     TrainerType m_trainer_type = TrainerType::WEIGHTED_RANDOM_SELECT;
+    std::string m_path_to_input_file;
 };

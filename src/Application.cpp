@@ -16,12 +16,12 @@ bool Application::load_vocabulary_from_file(const std::string & filepath, std::s
 
     std::ifstream file(filepath);
     if (!file) {
-        throw std::invalid_argument("Error when opening the file");
+        throw std::invalid_argument("Error when opening the file\n");
     }
 
     std::vector<TranslationUnit> vocabulary;
     if (DataHandler::load_data(file, vocabulary, syntax_errors) == false) {
-        throw std::logic_error("Error occurred when loading the data");
+        throw std::logic_error("Error occurred when loading the data\n");
     }
 
     if (vocabulary.empty() || !syntax_errors.empty()) {
@@ -56,7 +56,7 @@ void Application::save_vocabulary_to_file() {
     if (m_trainer == nullptr && m_settings.m_path_to_input_file.empty()) {
         return;
     } else if ((m_trainer == nullptr && !m_settings.m_path_to_input_file.empty()) || (m_trainer != nullptr && m_settings.m_path_to_input_file.empty())) {
-        throw std::logic_error("Internal error at Application::save_vocabulary_to_file(). Please inform developer");
+        throw std::logic_error("Internal error at Application::save_vocabulary_to_file(). Please inform developer\n");
     }
 
     DataHandler::save_data(m_settings.m_path_to_input_file, m_trainer->get_vocabulary());   // May throw

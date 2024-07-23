@@ -33,9 +33,9 @@ std::istream & operator>>(std::istream & is, TranslationUnit & unit) {
 
     is >> weight;
     if (is.eof()) {
-        throw InvalidSyntax("Empty line");
+        throw InvalidSyntax("Empty line\n");
     } else if (is.fail()) {
-        throw InvalidSyntax("Weight expected at the beginning of the line");
+        throw InvalidSyntax("Weight expected at the beginning of the line\n");
     } else if (weight < Settings::MINIMUM_WEIGHT || weight > Settings::MAXIMUM_WEIGHT) {
         std::string message = "Weight has to be in range ";
         message += std::to_string(Settings::MINIMUM_WEIGHT) + " - " + std::to_string(Settings::MAXIMUM_WEIGHT)
@@ -55,8 +55,7 @@ std::istream & operator>>(std::istream & is, TranslationUnit & unit) {
 
         if (!TranslationUnit::word_is_valid(word)) {
             std::string message = "Invalid character in word: ";
-            message += word;
-            message += "\n";
+            message += word + "\n";
             throw InvalidSyntax(message.c_str());
         }
 
@@ -69,9 +68,9 @@ std::istream & operator>>(std::istream & is, TranslationUnit & unit) {
     }
 
     if (word_count < 2) {
-        throw InvalidSyntax("Word to translate or translation is missing");
+        throw InvalidSyntax("Word to translate or translation is missing\n");
     } else if (!is.eof()) {
-        throw std::logic_error("Unknown error");
+        throw std::logic_error("Unknown error\n");
     }
 
     return is;

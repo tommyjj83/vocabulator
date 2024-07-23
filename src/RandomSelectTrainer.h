@@ -21,7 +21,7 @@ class RandomSelectTrainer : public VocabularyTrainer {
     :   m_vocabulary{std::move(vocabulary)},
         m_generator(0, m_vocabulary.size() - 1, generator) {
         if (m_vocabulary.empty()) {
-            throw std::invalid_argument("Given vocabulary is empty");
+            throw std::invalid_argument("Given vocabulary is empty\n");
         }
     }
 

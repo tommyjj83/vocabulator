@@ -44,7 +44,7 @@ bool DataHandler::load_data(std::istream & input, std::vector<TranslationUnit> &
 
 void DataHandler::save_data(const std::string & filepath, const std::vector<TranslationUnit> & vocabulary) {
     if (fs::exists(filepath) && !std::filesystem::is_regular_file(filepath)) {
-        throw std::logic_error("filepath, if exists, must be a regular file");
+        throw std::logic_error("filepath, if exists, must be a regular file\n");
     }
 
     std::filesystem::path directory = std::filesystem::path{filepath}.parent_path();
@@ -85,14 +85,14 @@ void DataHandler::rtrim(std::string &s) {
 void DataHandler::write_file(const std::string & file_path, const std::vector<TranslationUnit> & vocabulary) {
     if (std::filesystem::exists(file_path)) {
         std::string message = "Could not be saved, because file ";
-        message += file_path + " already exists.";
+        message += file_path + " already exists\n ";
         throw std::logic_error(message.c_str());
     }
 
     std::ofstream file{file_path};
     if (!file) {
         std::string message = "Failed to open file ";
-        message += file_path + " for writing";
+        message += file_path + " for writing\n";
         throw std::logic_error(message.c_str());
     }
 

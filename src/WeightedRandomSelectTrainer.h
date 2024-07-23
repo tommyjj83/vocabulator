@@ -23,7 +23,7 @@ class WeightedRandomSelectTrainer : public VocabularyTrainer {
         m_prng{prng},
         m_current_unit{0} { // Dummy
         if (m_vocabulary.empty()) {
-            throw std::invalid_argument("Given vocabulary is empty");
+            throw std::invalid_argument("Given vocabulary is empty\n");
         }
 
         vocabulary_partial_sum(0);

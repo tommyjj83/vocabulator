@@ -24,7 +24,7 @@ class RoundRobinTrainer : public VocabularyTrainer {
     :   m_vocabulary{std::move(vocabulary)},
         m_current_unit{0} {
         if (m_vocabulary.empty()) {
-            throw std::invalid_argument("Given vocabulary is empty");
+            throw std::invalid_argument("Given vocabulary is empty\n");
         }
     }
 

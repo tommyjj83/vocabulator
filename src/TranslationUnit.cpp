@@ -3,12 +3,9 @@
  * @date 05. 07. 2024
  */
 
-#include <algorithm>
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
 #include "DataHandler.h"
-#include "InvalidSyntax.h"
-#include "Settings.h"
 #include "TranslationUnit.h"
 
 bool TranslationUnit::check_translation(const std::string & translation) const {

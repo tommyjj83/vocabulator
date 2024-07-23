@@ -5,8 +5,11 @@
 
 #pragma once
 
+#include "algorithm"
 #include <string>
 #include <vector>
+#include "InvalidSyntax.h"
+#include "Settings.h"
 
 /**
  * This class encapsulates one translation unit, that is word to be translated and the possible translations.
@@ -14,10 +17,42 @@
 class TranslationUnit {
   public:
     TranslationUnit() = default;
+
+    /**
+     * @throws InvalidSyntax If word to translate or translation contains invalid character or is empty, or there is not
+     * single translation, or weight is less than Settings::MINIMUM_WEIGHT or more than Settings::MAXIMUM_WEIGHT
+     */
     TranslationUnit(std::string word_to_translate, std::vector<std::string> translation, unsigned weight)
     :   m_word_to_translate{std::move(word_to_translate)},
         m_translation{std::move(translation)},
-        m_weight{weight} {}
+        m_weight{weight} {
+        if (!word_is_valid(m_word_to_translate)) {
+            std::string message = "Word to translate '";
+            message += m_word_to_translate + "' contains invalid character or is empty\n";
+            throw InvalidSyntax(message.c_str());
+        }
+
+        if (m_translation.empty()) {
+            throw InvalidSyntax("There needs to be at least one translation\n");
+        }
+
+        for (const std::string & s : m_translation) {
+            if (word_is_valid(s)) {
+                continue;
+            }
+
+            std::string message = "Translation '";
+            message += s + "' contains invalid character or is empty\n";
+            throw InvalidSyntax(message.c_str());
+        }
+
+        if (m_weight < Settings::MINIMUM_WEIGHT || m_weight > Settings::MAXIMUM_WEIGHT) {
+            std::string message = "Weight has to be in range ";
+            message += std::to_string(Settings::MINIMUM_WEIGHT) + " - " + std::to_string(Settings::MAXIMUM_WEIGHT)
+                       + ". Weight found: " + std::to_string(weight) + "\n";
+            throw InvalidSyntax(message.c_str());
+        }
+    }
 
     ~TranslationUnit() = default;
     TranslationUnit(const TranslationUnit & other) = default;

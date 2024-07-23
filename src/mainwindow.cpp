@@ -78,8 +78,10 @@ void MainWindow::on_btnSelectVocabularyFile_clicked()
         }
     }
 
+    std::string syntax_errors;
+    bool result;
     try {
-        m_application.load_vocabulary_from_file(file.toStdString());
+        result = m_application.load_vocabulary_from_file(file.toStdString(), syntax_errors);
     } catch (const std::invalid_argument & exception) {
         ui->labelFileSelected->setText("No file selected");
         ui->labelError->setText(QString{exception.what()});
@@ -88,6 +90,15 @@ void MainWindow::on_btnSelectVocabularyFile_clicked()
         ui->labelFileSelected->setText("No file selected");
         ui->labelError->setText(QString{exception.what()});
         return;
+    }
+
+    if (result == false && syntax_errors.empty()) { // No data loaded and no syntax error => empty file
+        ui->labelError->setText("The file is empty");
+        return;
+    } else if (result == false && !syntax_errors.empty()) { // Syntax error
+        ui->labelError->setText("Could not be loaded due to syntax errors");
+        QMessageBox::warning(nullptr, "Syntax errors found", syntax_errors.c_str());
+        return; // This is necessary, otherwise lines with syntax error (not loaded) will not be saved!!!
     }
 
     ui->labelFileSelected->setText(file);

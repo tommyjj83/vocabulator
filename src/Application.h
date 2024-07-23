@@ -36,10 +36,13 @@ class Application {
      * has not to be empty or only consist of spaces.
      * After this function is called and it fails at any point, or not a single translation unit is loaded, the application is not ready
      * @param[in] filepath Path to a file from which to load data
+     * @param[out] syntax_errors This string contains information of all syntax errors found when loading the data. If no
+     * syntax errors were found, it stays unchanged
      * @throws std::logic_error When there is a problem with loading the data, or no data is loaded
      * @throws std::invalid_argument When the file fails to be opened
+     * @returns True, if data are loaded and no error occurred, false if no data were loaded or some syntax error occurred
      */
-    void load_vocabulary_from_file(const std::string & filepath);
+    bool load_vocabulary_from_file(const std::string & filepath, std::string & syntax_errors);
 
     /**
      * Saves vocabulary, that is being currently used to file, from which the vocabulary what originally loaded. If saving

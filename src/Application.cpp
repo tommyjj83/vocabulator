@@ -10,7 +10,7 @@
 #include "RoundRobinTrainer.h"
 #include "WeightedRandomSelectTrainer.h"
 
-void Application::load_vocabulary_from_file(const std::string & filepath) {
+bool Application::load_vocabulary_from_file(const std::string & filepath, std::string & syntax_errors) {
     m_data_loaded = false;
     m_settings.m_path_to_input_file.clear();
 
@@ -20,12 +20,12 @@ void Application::load_vocabulary_from_file(const std::string & filepath) {
     }
 
     std::vector<TranslationUnit> vocabulary;
-    if (DataHandler::load_data(file, vocabulary) == false) {
+    if (DataHandler::load_data(file, vocabulary, syntax_errors) == false) {
         throw std::logic_error("Error occurred when loading the data");
     }
 
-    if (vocabulary.empty()) {
-        throw std::logic_error("No data loaded");
+    if (vocabulary.empty() || !syntax_errors.empty()) {
+        return false;
     }
 
     m_data_loaded = true;
@@ -42,6 +42,8 @@ void Application::load_vocabulary_from_file(const std::string & filepath) {
             m_trainer = std::make_unique<RoundRobinTrainer>(RoundRobinTrainer{vocabulary});
             break;
     }
+
+    return true;
 }
 
 

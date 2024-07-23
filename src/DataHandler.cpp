@@ -12,17 +12,20 @@
 
 namespace fs = std::filesystem;
 
-bool DataHandler::load_data(std::istream & input, std::vector<TranslationUnit> & vocabulary) {
+bool DataHandler::load_data(std::istream & input, std::vector<TranslationUnit> & vocabulary, std::string & syntax_errors) {
     if (!input) {
         return false;
     }
 
+    unsigned line_cnt = 0;
     for (std::string line; std::getline(input, line);) {
         TranslationUnit new_unit{};
         std::istringstream iss{line};
+        ++line_cnt;
         try {
             iss >> new_unit;
-        } catch (const InvalidSyntax & exception) { // TODO Show syntax errors to the user
+        } catch (const InvalidSyntax & exception) {
+            syntax_errors += "Invalid syntax on line " + std::to_string(line_cnt) + ": " + exception.what();
             continue;
         } catch (const std::logic_error & exception) {
             continue;

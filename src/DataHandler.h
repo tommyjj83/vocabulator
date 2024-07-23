@@ -24,12 +24,14 @@ class DataHandler {
      * TranslationUnit::operator>>. If syntax on that line is not valid (TranslationUnit::operator>> throws) the line is skipped.
      * @param[in] input Input stream from which to load the data
      * @param[out] vocabulary Vector of translation units, into which the data from input will be stored
+     * @param[out] syntax_errors This string contains information of all syntax errors found when loading the data. If no
+     * syntax errors were found, it stays unchanged
      * @returns True, if the data was successfully loaded, false if
      *  i) The stream was invalid
      *  ii) Loading from the stream failed during loading (function could not reach eof)
      * If the syntax of the line is incorrect, the function skips such line and does NOT return false
      */
-    static bool load_data(std::istream & input, std::vector<TranslationUnit> & vocabulary);
+    static bool load_data(std::istream & input, std::vector<TranslationUnit> & vocabulary, std::string & syntax_errors);
 
     /**
      * This function saves vocabulary into a gives stream. Syntax of saved data is specified by TranslationUnit::operator<<.

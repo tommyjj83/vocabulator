@@ -84,6 +84,8 @@ class TranslationUnit {
      *  weight;to_translate;translation[;translation[;translation...]]
      * where word to translate and translation has to contain only letters, dashes, apostrophes, or spaces. The word
      * has not to be empty or only consist of spaces.
+     * @throws InvalidSyntax If invalid syntax is found, the exception is thrown
+     * @throws std::logic_error If failed to reach eof of is because of other reason than invalid syntax, the exception is thrown
      */
     friend std::istream & operator>>(std::istream & is, TranslationUnit & unit);
 

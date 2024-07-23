@@ -18,3 +18,8 @@ void RoundRobinTrainer::update() {
 std::vector<TranslationUnit> RoundRobinTrainer::get_vocabulary() const {
     return m_vocabulary;
 }
+
+
+void RoundRobinTrainer::adjust_weight(long difference) {
+    m_vocabulary[m_current_unit].adjust_weight(difference);
+}

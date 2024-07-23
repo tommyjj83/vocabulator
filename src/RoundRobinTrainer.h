@@ -32,19 +32,13 @@ class RoundRobinTrainer : public VocabularyTrainer {
     RoundRobinTrainer(const RoundRobinTrainer & other) = default;
     RoundRobinTrainer(RoundRobinTrainer && other) noexcept = default;
 
-    /**
-     * This function returns the current translation unit, such that it takes each word in vocabulary in order given during
-     * the initialization. When all translation units has been taken, it starts from the beginning.
-     * @returns The current translation unit
-     */
     const TranslationUnit & get_current() const override;
 
-    /**
-     * This function updates internal structure, so that the next call of get_current() would return next translation unit in order
-     */
     void update() override;
 
     std::vector<TranslationUnit> get_vocabulary() const override;
+
+    void adjust_weight(long difference) override;
 
   private:
     std::vector<TranslationUnit> m_vocabulary;

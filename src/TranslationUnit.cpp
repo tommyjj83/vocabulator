@@ -4,7 +4,6 @@
  */
 
 #include <algorithm>
-#include <iostream>
 #include <unicode/uchar.h>
 #include <unicode/unistr.h>
 #include "DataHandler.h"
@@ -106,4 +105,29 @@ std::string TranslationUnit::get_all_translations() const {
     }
 
     return std::move(to_return);
+}
+
+
+void TranslationUnit::adjust_weight(long difference) {
+    if (difference == 0) {
+        return;
+    }
+
+    if (difference > 0) {
+        if (Settings::MAXIMUM_WEIGHT - m_weight < difference) { // m_weight <= Settings::MAXIMUM_WEIGHT ==> will not underflow
+            m_weight = Settings::MAXIMUM_WEIGHT;
+            return;
+        }
+
+        m_weight += difference;
+        return;
+    }
+
+    unsigned abs = std::abs(difference);
+    if (m_weight - Settings::MINIMUM_WEIGHT < abs) {
+        m_weight = Settings::MINIMUM_WEIGHT;
+        return;
+    }
+
+    m_weight -= abs;
 }

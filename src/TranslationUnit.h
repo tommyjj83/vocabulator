@@ -52,6 +52,13 @@ class TranslationUnit {
      */
     friend std::istream & operator>>(std::istream & is, TranslationUnit & unit);
 
+    /**
+     * This function adjusts weight. If the new weight should be less than allowed range, the weight will be set to the
+     * minimal allowed value. The same goes for the other side of the range.
+     * @param[in] difference The difference to add to current weight
+     */
+    void adjust_weight(long difference);
+
     std::string m_word_to_translate;
     std::vector<std::string> m_translation;
     unsigned m_weight;

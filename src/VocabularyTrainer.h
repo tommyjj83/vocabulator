@@ -33,4 +33,12 @@ class VocabularyTrainer {
      * @returns The vocabulary in a state in which it is after possible changes made
      */
     virtual std::vector<TranslationUnit> get_vocabulary() const = 0;
+
+    /**
+     * This function adjusts weight of TranslationUnit returned by calling get_current() and if given trainer needs to,
+     * it update its structures. If the new weight should be less than allowed range, the weight will be set to the minimal
+     * allowed value. The same goes for the other side of the range.
+     * @param[in] difference The difference to add to current weight
+     */
+    virtual void adjust_weight(long difference) = 0;
 };

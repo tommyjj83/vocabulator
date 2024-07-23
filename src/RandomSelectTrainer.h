@@ -33,6 +33,8 @@ class RandomSelectTrainer : public VocabularyTrainer {
 
     std::vector<TranslationUnit> get_vocabulary() const override;
 
+    void adjust_weight(long difference) override;
+
   private:
     std::vector<TranslationUnit> m_vocabulary;
     RandomFromRangeGenerator m_generator;

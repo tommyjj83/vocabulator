@@ -48,3 +48,18 @@ void Application::load_vocabulary_from_file(const std::string & filepath) {
 bool Application::is_ready() const {
     return m_data_loaded;
 }
+
+
+void Application::save_vocabulary_to_file() {
+    if (m_trainer == nullptr && m_settings.m_path_to_input_file.empty()) {
+        return;
+    } else if ((m_trainer == nullptr && !m_settings.m_path_to_input_file.empty()) || (m_trainer != nullptr && m_settings.m_path_to_input_file.empty())) {
+        throw std::logic_error("Internal error at Application::save_vocabulary_to_file(). Please inform developer");
+    }
+
+    DataHandler::save_data(m_settings.m_path_to_input_file, m_trainer->get_vocabulary());   // May throw
+
+    m_data_loaded = false;
+    m_trainer = nullptr;
+    m_settings.m_path_to_input_file.clear();
+}

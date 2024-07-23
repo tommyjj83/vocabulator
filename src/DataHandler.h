@@ -37,6 +37,7 @@ class DataHandler {
      * file filepath.tmp must not exist in the same directory, otherwise the saving will fail.
      * @param[in] filepath File, into which the vocabulary will be saved.
      * @param[in] vocabulary Vocabulary which will be saved into the specified file
+     * @throws std::logic_error If any error when writing into a file or manipulating with them occurs, exception is thrown
      */
     static void save_data(const std::string & filepath, const std::vector<TranslationUnit> & vocabulary);
 
@@ -57,7 +58,7 @@ class DataHandler {
      * This function writes the vocabulary into a file specified by file_path. If file already exists, it does not overwrite it
      * @param[in] file_path File into which write the vocabulary
      * @param[in] vocabulary The vocabulary to be written
-     * @throws std::logic_error If any error when writing into a file occurs, exception is thrown.
+     * @throws std::logic_error If any error when writing into a file occurs, exception is thrown
      */
     static void write_file(const std::string & file_path, const std::vector<TranslationUnit> & vocabulary);
 };

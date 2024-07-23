@@ -42,6 +42,14 @@ class Application {
     void load_vocabulary_from_file(const std::string & filepath);
 
     /**
+     * Saves vocabulary, that is being currently used to file, from which the vocabulary what originally loaded. If saving
+     * fails (std::logic_error is thrown) everything stays valid (trainer is not invalidated, application is still ready,
+     * saving can be retried).
+     * @throws std::logic_error When a problem with saving into a file occurs
+     */
+    void save_vocabulary_to_file();
+
+    /**
      * This function returns, if the application is ready to provide practicing vocabulary
      * @returns True, if the application is ready, false otherwise
      */

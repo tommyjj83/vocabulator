@@ -89,4 +89,10 @@ private:
      * incorrect translations should increase by one
      */
     void increase_status_counter(bool translation_is_correct);
+
+    /**
+     * Handles actions necessary when main window closes
+     * @param event Event
+     */
+    void closeEvent(QCloseEvent *event);
 };

@@ -3,6 +3,7 @@
  * @date 03. 07. 2024
  */
 
+#include <QCloseEvent>
 #include <QFileDialog>
 #include <QMessageBox>
 #include "mainwindow.h"
@@ -241,4 +242,20 @@ void MainWindow::increase_status_counter(bool translation_is_correct) {
     size_t value = std::stoi(label->text().toStdString());
     ++value;
     label->setText(std::to_string(value).c_str());
+}
+
+
+void MainWindow::closeEvent(QCloseEvent * event) {
+    try {
+        m_application.save_vocabulary_to_file();
+    } catch (const std::logic_error & exception) {
+        std::string message = exception.what();
+        message += "\n\nDo you want to quit WITHOUT saving?";
+        QMessageBox::StandardButton result =
+                QMessageBox::critical(nullptr, "Error", message.c_str(), QMessageBox::Yes | QMessageBox::No);
+
+        if (result == QMessageBox::No) {
+            event->ignore();
+        }
+    }
 }

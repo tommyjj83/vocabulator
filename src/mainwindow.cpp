@@ -67,6 +67,18 @@ void MainWindow::on_btnSelectVocabularyFile_clicked()
     }
 
     try {
+        m_application.save_vocabulary_to_file();
+    } catch (const std::logic_error & exception) {
+        std::string message = exception.what();
+        message += "\n\nDo you want to load new file WITHOUT saving the previous one?";
+        QMessageBox::StandardButton answer = QMessageBox::critical(nullptr, "Error", message.c_str(), QMessageBox::Yes | QMessageBox::No);
+
+        if (answer == QMessageBox::No) {
+            return;
+        }
+    }
+
+    try {
         m_application.load_vocabulary_from_file(file.toStdString());
     } catch (const std::invalid_argument & exception) {
         ui->labelFileSelected->setText("No file selected");

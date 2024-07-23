@@ -50,6 +50,14 @@ class Application {
     void save_vocabulary_to_file();
 
     /**
+     * This function checks, if translation is one of the possible translations in the current TranslationUnit. After checking,
+     * it adjusts weight of that TranslationUnit.
+     * @param[in] translation Word to be checked if it is a valid translation
+     * @returns True, if the word is valid translation, false otherwise
+     */
+    bool check_translation(const std::string & translation) const;
+
+    /**
      * This function returns, if the application is ready to provide practicing vocabulary
      * @returns True, if the application is ready, false otherwise
      */

@@ -13,4 +13,6 @@ class Settings {
     std::string m_path_to_input_file;
     static const unsigned MINIMUM_WEIGHT = 1;  // For correct functionality of WeightedRandomSelectTrainer should be >= 1
     static const unsigned MAXIMUM_WEIGHT = 100;
+    static const long TRANSLATION_CORRECT_WEIGHT_DIFF = -15;
+    static const long TRANSLATION_INCORRECT_WEIGHT_DIFF = 15;
 };

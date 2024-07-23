@@ -63,3 +63,15 @@ void Application::save_vocabulary_to_file() {
     m_trainer = nullptr;
     m_settings.m_path_to_input_file.clear();
 }
+
+
+bool Application::check_translation(const std::string & translation) const {
+    bool translation_is_correct = m_trainer->get_current().check_translation(translation);
+    if (translation_is_correct) {
+        m_trainer->adjust_weight(Settings::TRANSLATION_CORRECT_WEIGHT_DIFF);
+    } else {
+        m_trainer->adjust_weight(Settings::TRANSLATION_INCORRECT_WEIGHT_DIFF);
+    }
+
+    return translation_is_correct;
+}

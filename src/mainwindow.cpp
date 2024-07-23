@@ -44,7 +44,7 @@ void MainWindow::on_btnCheckTranslation_clicked() {
 
     QString translation = ui->lineEditTranslation->text();
     const TranslationUnit & current_unit = m_application.m_trainer->get_current();
-    if (current_unit.check_translation(translation.toStdString()) == true) {
+    if (m_application.check_translation(translation.toStdString()) == true) {
         QString answer = "Correct! All possible translations are:\n";
         answer += current_unit.get_all_translations();
         ui->labelResult->setText(answer);

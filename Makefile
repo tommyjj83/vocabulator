@@ -2,11 +2,12 @@ TARGET=vocabulator
 
 CXX=g++
 LD=g++
-INCDIRS=-I$(QTDIR)/include -I$(QTDIR)/include/QtWidgets -I$(QTDIR)/include/QtGui
+INCDIRS=-I$(QTDIR)/include -I$(QTDIR)/include/QtWidgets -I$(QTDIR)/include/QtGui -I$(QTDIR)/include/QtCore
 CXXFLAGS=-std=c++20 -Wall -pedantic
-LDFLAGS=-std=c++20 -Wall -pedantic -licuuc -licui18n -L$(QTDIR)/lib -lQt6Widgets -lQt6Core -lQt6Gui
+LDFLAGS=-std=c++20 -Wall -pedantic -licuuc -licui18n -L$(QTDIR)/lib -lQt6Widgets -lQt6Gui -lQt6Core
 
 # Files
+DEPS=Makefile.deps
 HEADERS=$(wildcard src/*.h)
 SOURCES=$(wildcard src/*.cpp)
 MOC_HEADERS=src/mainwindow.h
@@ -31,7 +32,7 @@ run: compile
 	./$(TARGET)
 
 .PHONY: compile
-compile: qt_specific $(TARGET)
+compile: deps qt_specific $(TARGET)
 
 .PHONY: qt_specific
 qt_specific: $(UI_HEADERS) $(MOC_SOURCES) 
@@ -42,9 +43,6 @@ $(TARGET): $(OBJECTS)
 %.o: %.cpp $(UI_HEADERS)
 	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $< -o $@
 
-moc_%.o: moc_%.cpp
-	$(CXX) $(CXXFLAGS) $(INCDIRS) -c $< -o $@
-
 ui_%.h: %.ui
 	$(UIC) $< -o $@
 
@@ -53,9 +51,9 @@ moc_%.cpp: %.h
 
 .PHONY: clean
 clean:
-	rm -f $(OBJECTS) $(TARGET) $(UI_HEADERS) $(MOC_SOURCES) Makefile.deps
+	rm -f $(OBJECTS) $(TARGET) $(UI_HEADERS) $(MOC_SOURCES) $(DEPS)
 
 deps: $(UI_HEADERS)
-	$(CXX) -MM $(SOURCES) > Makefile.deps
+	$(CXX) -MM $(filter-out $(MOC_SOURCES), $(SOURCES)) | sed '/^[^ \t]/ s/^/src\//' > $(DEPS)
 
--include Makefile.deps
+-include $(DEPS)

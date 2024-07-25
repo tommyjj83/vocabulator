@@ -21,8 +21,8 @@ class Application {
     Application() = delete;
 
     explicit Application(std::mt19937 & prng)
-    :   m_prng{prng},
-        m_trainer{nullptr},
+    :   m_trainer{nullptr},
+        m_prng{prng},
         m_data_loaded{false} {}
 
     ~Application() = default;

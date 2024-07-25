@@ -100,7 +100,7 @@ std::string TranslationUnit::get_all_translations() const {
         to_return += m_translation[i];
     }
 
-    return std::move(to_return);
+    return to_return;
 }
 
 

@@ -136,20 +136,17 @@ void MainWindow::show_next_translation() {
 }
 
 
-void MainWindow::on_btnNextTranslation_clicked() {
-    configure_training_widget(true);
-    m_application.m_trainer->update();
-    show_next_translation();
-}
+// void MainWindow::on_btnNextTranslation_clicked() {
+//     configure_training_widget(true);
+//     m_application.m_trainer->update();
+//     show_next_translation();
+// }
 
 
 void MainWindow::configure_training_widget(bool before_submitting_translation) {
     if (before_submitting_translation == true) {
         ui->btnCheckTranslation->setDisabled(false);
         ui->btnCheckTranslation->setStyleSheet("QPushButton { background : white }");
-
-        ui->btnNextTranslation->setDisabled(true);
-        ui->btnNextTranslation->setStyleSheet("QPushButton { background : lightGray }");
 
         ui->lineEditTranslation->setReadOnly(false);
         ui->lineEditTranslation->setStyleSheet("QLineEdit { background : white }");
@@ -159,9 +156,6 @@ void MainWindow::configure_training_widget(bool before_submitting_translation) {
     } else {
         ui->btnCheckTranslation->setDisabled(true);
         ui->btnCheckTranslation->setStyleSheet("QPushButton { background : lightGray }");
-
-        ui->btnNextTranslation->setDisabled(false);
-        ui->btnNextTranslation->setStyleSheet("QPushButton { background : white }");
 
         ui->lineEditTranslation->setReadOnly(true);
         ui->lineEditTranslation->setStyleSheet("QLineEdit { background : lightGray }");

@@ -36,8 +36,6 @@ private slots:
 
     void on_btnModifyVocabularyFile_clicked();
 
-    void on_btnNextTranslation_clicked();
-
     void on_btnHome_clicked();
 
 private:

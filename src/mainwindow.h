@@ -38,6 +38,16 @@ private slots:
 
     void on_btnHome_clicked();
 
+    void on_btnTranslationCorrect_clicked();
+
+    void on_btnTranslationCorrectEasy_clicked();
+
+    void on_btnTranslationIncorrectAlmost_clicked();
+
+    void on_btnTranslationIncorrectMissingTranslation_clicked();
+
+    void on_btnTranslationIncorrectNoIdea_clicked();
+
 private:
     Ui::MainWindow *ui;
     Application m_application;

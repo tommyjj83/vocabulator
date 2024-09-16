@@ -14,5 +14,7 @@ class Settings {
     static const unsigned MINIMUM_WEIGHT = 1;  // For correct functionality of WeightedRandomSelectTrainer should be >= 1
     static const unsigned MAXIMUM_WEIGHT = 100;
     static const long TRANSLATION_CORRECT_WEIGHT_DIFF = -15;
-    static const long TRANSLATION_INCORRECT_WEIGHT_DIFF = 15;
+    static const long TRANSLATION_CORRECT_EASY_WEIGHT_DIFF = -30;
+    static const long TRANSLATION_INCORRECT_ALMOST_WEIGHT_DIFF = 15;
+    static const long TRANSLATION_INCORRECT_NO_IDEA_WEIGHT_DIFF = 30;
 };

@@ -44,18 +44,20 @@ void MainWindow::on_btnCheckTranslation_clicked() {
 
     QString translation = ui->lineEditTranslation->text();
     const TranslationUnit & current_unit = m_application.m_trainer->get_current();
-    if (m_application.check_translation(translation.toStdString()) == true) {
+    if (current_unit.check_translation(translation.toStdString()) == true) {
         QString answer = "Correct! All possible translations are:\n";
         answer += current_unit.get_all_translations();
         ui->labelResult->setText(answer);
         ui->labelResult->setStyleSheet("QLabel { color : green; }");
         increase_status_counter(true);
+        ui->translationOptionsStackedWidget->setCurrentWidget(ui->posttranslationOptionsCorrect);
     } else {
         QString answer = "Incorrect. The correct translation is:\n";
         answer += current_unit.get_all_translations();
         ui->labelResult->setText(answer);
         ui->labelResult->setStyleSheet("QLabel { color : red; }");
         increase_status_counter(false);
+        ui->translationOptionsStackedWidget->setCurrentWidget(ui->posttranslationOptionsIncorrect);
     }
 }
 
@@ -134,13 +136,6 @@ void MainWindow::show_next_translation() {
     ui->labelWordToTranslate->setFont(font);
     ui->labelWordToTranslate->setText(text);
 }
-
-
-// void MainWindow::on_btnNextTranslation_clicked() {
-//     configure_training_widget(true);
-//     m_application.m_trainer->update();
-//     show_next_translation();
-// }
 
 
 void MainWindow::configure_training_widget(bool before_submitting_translation) {
@@ -276,3 +271,45 @@ void MainWindow::closeEvent(QCloseEvent * event) {
         }
     }
 }
+
+void MainWindow::on_btnTranslationCorrect_clicked() {
+    m_application.m_trainer->adjust_weight(Settings::TRANSLATION_CORRECT_WEIGHT_DIFF);
+    configure_training_widget(true);
+    ui->translationOptionsStackedWidget->setCurrentWidget(ui->pretranslationOptions);
+    m_application.m_trainer->update();
+    show_next_translation();
+}
+
+
+void MainWindow::on_btnTranslationCorrectEasy_clicked() {
+    m_application.m_trainer->adjust_weight(Settings::TRANSLATION_CORRECT_EASY_WEIGHT_DIFF);
+    configure_training_widget(true);
+    ui->translationOptionsStackedWidget->setCurrentWidget(ui->pretranslationOptions);
+    m_application.m_trainer->update();
+    show_next_translation();
+}
+
+
+void MainWindow::on_btnTranslationIncorrectAlmost_clicked() {
+    m_application.m_trainer->adjust_weight(Settings::TRANSLATION_INCORRECT_ALMOST_WEIGHT_DIFF);
+    configure_training_widget(true);
+    ui->translationOptionsStackedWidget->setCurrentWidget(ui->pretranslationOptions);
+    m_application.m_trainer->update();
+    show_next_translation();
+}
+
+
+void MainWindow::on_btnTranslationIncorrectMissingTranslation_clicked()
+{
+
+}
+
+
+void MainWindow::on_btnTranslationIncorrectNoIdea_clicked() {
+    m_application.m_trainer->adjust_weight(Settings::TRANSLATION_INCORRECT_NO_IDEA_WEIGHT_DIFF);
+    configure_training_widget(true);
+    ui->translationOptionsStackedWidget->setCurrentWidget(ui->pretranslationOptions);
+    m_application.m_trainer->update();
+    show_next_translation();
+}
+

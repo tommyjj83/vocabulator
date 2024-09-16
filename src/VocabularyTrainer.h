@@ -41,4 +41,11 @@ class VocabularyTrainer {
      * @param[in] difference The difference to add to current weight
      */
     virtual void adjust_weight(long difference) = 0;
+
+    /**
+     * This function adds a new translation to the current translation unit
+     * @param[in] translation_to_add Translation to add
+     * @returns True, if translation was added, false otherwise
+     */
+    virtual bool add_translation(const std::string & translation_to_add) = 0;
 };

@@ -96,6 +96,13 @@ class TranslationUnit {
      */
     void adjust_weight(long difference);
 
+    /**
+     * This function adds new translation. First, the translation is validated.
+     * @param[in] translation_to_add Translation to be added
+     * @returns True, if the translation was added, false if the translation is no valid
+     */
+    bool add_translation(std::string translation_to_add);
+
     std::string m_word_to_translate;
     std::vector<std::string> m_translation;
     unsigned m_weight;

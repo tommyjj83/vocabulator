@@ -40,6 +40,8 @@ class RoundRobinTrainer : public VocabularyTrainer {
 
     void adjust_weight(long difference) override;
 
+    bool add_translation(const std::string & translation_to_add) override;
+
   private:
     std::vector<TranslationUnit> m_vocabulary;
     size_t m_current_unit;

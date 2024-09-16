@@ -299,9 +299,27 @@ void MainWindow::on_btnTranslationIncorrectAlmost_clicked() {
 }
 
 
-void MainWindow::on_btnTranslationIncorrectMissingTranslation_clicked()
-{
+void MainWindow::on_btnTranslationIncorrectMissingTranslation_clicked() {
+    QMessageBox::StandardButton result =
+            QMessageBox::question(nullptr, "Add new translation",
+                                  "Do you want to add new translation?\n\nRecommended if it's more than just a typo, for example.",
+                                                                  QMessageBox::Yes | QMessageBox::No);
 
+    if (result == QMessageBox::Yes) {
+        if (m_application.m_trainer->add_translation(ui->lineEditTranslation->text().toStdString()) == false) {
+            QMessageBox::critical(nullptr, "Error", "Could not be added because the given translation is not valid.");
+        }
+    } else {
+        // Set translation to be correct, so btnCheckTranslation works as if the user submitted correct answer
+        ui->lineEditTranslation->setText(m_application.m_trainer->get_current().m_translation.front().c_str());
+    }
+
+    QLabel * label = ui->labelIncorrectTranslationsCnt;
+    size_t value = std::stoi(label->text().toStdString());
+    --value;    // Value is at least 1
+    label->setText(std::to_string(value).c_str());
+
+    on_btnCheckTranslation_clicked();
 }
 
 

@@ -24,3 +24,8 @@ std::vector<TranslationUnit> RandomSelectTrainer::get_vocabulary() const {
 void RandomSelectTrainer::adjust_weight(long difference) {
     m_vocabulary[m_generator.current()].adjust_weight(difference);
 }
+
+
+bool RandomSelectTrainer::add_translation(const std::string & translation_to_add) {
+    return m_vocabulary[m_generator.current()].add_translation(translation_to_add);
+}

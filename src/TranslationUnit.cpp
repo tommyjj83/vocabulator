@@ -127,3 +127,16 @@ void TranslationUnit::adjust_weight(long difference) {
 
     m_weight -= abs;
 }
+
+
+bool TranslationUnit::add_translation(std::string translation_to_add) {
+    DataHandler::ltrim(translation_to_add);
+    DataHandler::rtrim(translation_to_add);
+
+    if (!word_is_valid(translation_to_add)) {
+        return false;
+    }
+
+    m_translation.emplace_back(translation_to_add);
+    return true;
+}

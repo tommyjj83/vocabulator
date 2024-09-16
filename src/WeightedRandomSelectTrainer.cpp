@@ -46,3 +46,8 @@ void WeightedRandomSelectTrainer::vocabulary_partial_sum(size_t start_idx) {
         m_weights[i] = m_weights[i - 1] + m_vocabulary[i].m_weight;
     }
 }
+
+
+bool WeightedRandomSelectTrainer::add_translation(const std::string & translation_to_add) {
+    return m_vocabulary[m_current_unit].add_translation(translation_to_add);
+}

@@ -45,6 +45,8 @@ class WeightedRandomSelectTrainer : public VocabularyTrainer {
 
     void adjust_weight(long difference) override;
 
+    bool add_translation(const std::string & translation_to_add) override;
+
   private:
     std::vector<TranslationUnit> m_vocabulary;
     std::vector<unsigned> m_weights;
